@@ -1,7 +1,7 @@
 Map = Drawable:extend()
 Map:implement(Updatable)
 
-Map.size = {height = 9, width = 15}
+Map.size = {height = 15, width = 20}
 Map.tileSize = 128
 
 function Map:new(imageMap)
@@ -46,4 +46,11 @@ end
 
 function Map:getTile(location)
   return self.tiles[location.x][location.y]
+end
+
+function Map:getPixelSize()
+  return {
+    width = Map.size.width * Map.tileSize,
+    height = Map.size.height * Map.tileSize
+  }
 end
