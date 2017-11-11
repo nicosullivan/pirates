@@ -54,7 +54,25 @@ function Player:shoot()
                         self:getLocation(),
                         200,
                         self:getRotation(),
-                        1000
+                        1000,
+                        {
+                          image = loader.Image.shootAnimationHighRes,
+                          frameWidth = 128,
+                          frameHeight = 128,
+                          stopAtEnd = true,
+                          frames = {
+                            {1, 1, 9, 1, .025}
+                          }
+                        },
+                        {
+                          image = loader.Image.explosionSpriteSheet,
+                          frameWidth = 75,
+                          frameHeight = 75,
+                          stopAtEnd = true,
+                          frames = {
+                            {1, 1, 3, 1, .1}
+                          }
+                        }
                       )
     table.insert(self.projectiles, projectile)
   end
@@ -70,7 +88,7 @@ function Player:update(dt)
   if table.getn(self.projectiles) ~= 0 then
     for k, projectile in ipairs(self.projectiles) do
       projectile:update(dt)
-      if not projectile:hasDistanceLeft() then
+      if not projectile:isAnimating() then
         table.remove(self.projectiles, k)
       end
     end
