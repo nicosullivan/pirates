@@ -2,7 +2,7 @@ Controllable = Object:extend()
 
 function Controllable:setControls(controls)
   self.controls = controls
-  self.input:changeControls(self.controls)
+  self.input.controls = self.controls
   return self
 end
 

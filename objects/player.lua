@@ -23,10 +23,10 @@ function Player:new(image, loc)
       shoot = {'key:space'}
   }
 
-  self:setInput(baton.new(
-                  controls,
-                  love.joystick.getJoysticks()[1]
-  ))
+  self:setInput(baton.new({
+                  controls = controls,
+                  joystick = love.joystick.getJoysticks()[1]
+  }))
     :setControls(controls)
 
   self.hasShot = false
