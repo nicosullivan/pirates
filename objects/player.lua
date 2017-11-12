@@ -3,6 +3,7 @@ Player:implement(Updatable)
 Player:implement(Controllable)
 
 Player.speed = 100
+Player.shootCooldown = 1
 Player.logPrefix = "[Player] "
 
 function Player:new(image, loc)
@@ -28,9 +29,10 @@ function Player:new(image, loc)
   ))
     :setControls(controls)
 
-    self.hasShot = false
-    self.projectiles = {}
-    self.maxProjectiles = 50
+  self.hasShot = false
+  self.projectiles = {}
+  self.maxProjectiles = 50
+  self.shootTime = 0
 end
 
 function Player:move(x, y)
@@ -48,8 +50,9 @@ function Player:rotate(degrees)
 end
 
 function Player:shoot()
-  if table.getn(self.projectiles) < self.maxProjectiles then
+  if table.getn(self.projectiles) < self.maxProjectiles and not self:isShooting() then
     log.trace(Player.logPrefix..'Shooting')
+    self:resetShoot()
     local projectile = Projectile(
                         loader.Image.ShipParts.cannonBall,
                         self:getLocation(),
@@ -79,9 +82,26 @@ function Player:shoot()
   end
 end
 
+function Player:updateShootTimer(amount)
+  self.shootTime = self.shootTime + amount
+  if self.shootTime >= Player.shootCooldown then
+    self.shooting = false
+  end
+  return self
+end
+
+function Player:resetShoot()
+  self.shootTime = 0
+  self.shooting = true
+end
+
+function Player:isShooting()
+  return self.shooting
+end
+
 function Player:update(dt)
   self:getInput():update()
-
+  self:updateShootTimer(dt)
   if self:getInput():get 'shoot' ~= 0 then
     self:shoot()
   end
