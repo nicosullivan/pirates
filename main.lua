@@ -27,9 +27,12 @@ function love.load()
 
   graphs = {}
   graphs.fps = debugGraph:new('fps', 0, 0, 300, 150)
+  graphs.fps.font = loader.Font[40]
   graphs.mem = debugGraph:new('mem', 0, 150, 300, 150)
+  graphs.mem.font = loader.Font[40]
   graphs.projectiles = debugGraph:new('custom', 0, 300, 300, 150)
-
+  graphs.projectiles.font = loader.Font[40]
+  
   player = Player(loader.Image.Ships.ship2, { x = 200, y = 200 })
   map = Map({
     loader.Image.Tiles.tile_73,
