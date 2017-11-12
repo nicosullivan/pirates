@@ -56,7 +56,7 @@ function Player:shoot()
     local projectile = Projectile(
                         loader.Image.ShipParts.cannonBall,
                         self:getLocation(),
-                        200,
+                        400,
                         self:getRotation(),
                         1000,
                         {
