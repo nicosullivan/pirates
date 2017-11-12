@@ -28,6 +28,7 @@ function love.load()
   graphs = {}
   graphs.fps = debugGraph:new('fps', 0, 0, 300, 150)
   graphs.mem = debugGraph:new('mem', 0, 150, 300, 150)
+  graphs.projectiles = debugGraph:new('custom', 0, 300, 300, 150)
 
   player = Player(loader.Image.Ships.ship2, { x = 200, y = 200 })
   map = Map({
@@ -45,9 +46,10 @@ function love.update(dt)
   map:update(dt)
 
   lurker:update()
-  for _, g in pairs(graphs) do
-    g:update(dt)
-  end
+  graphs.fps:update(dt)
+  graphs.mem:update(dt)
+  graphs.projectiles:update(dt, player:getProjectileCount())
+  graphs.projectiles.label = "Projectiles: " .. player:getProjectileCount()
 
   local shipPos = player:getLocation()
   cam:setPosition(shipPos.x, shipPos.y)

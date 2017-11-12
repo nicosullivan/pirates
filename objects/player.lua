@@ -3,6 +3,7 @@ Player:implement(Updatable)
 Player:implement(Controllable)
 
 Player.speed = 100
+Player.logPrefix = "[Player] "
 
 function Player:new(image, loc)
   Player.super.new(self,
@@ -48,7 +49,7 @@ end
 
 function Player:shoot()
   if table.getn(self.projectiles) < self.maxProjectiles then
-    log.debug('shooting...')
+    log.trace(Player.logPrefix..'Shooting')
     local projectile = Projectile(
                         loader.Image.ShipParts.cannonBall,
                         self:getLocation(),
@@ -92,7 +93,6 @@ function Player:update(dt)
         table.remove(self.projectiles, k)
       end
     end
-    log.debug('Projectile Count = '..table.getn(self.projectiles))
   end
 
   local rotation = self:getInput():get 'right' - self:getInput():get 'left'
@@ -110,4 +110,8 @@ function Player:draw()
       projectile:draw()
     end
   end
+end
+
+function Player:getProjectileCount()
+  return table.getn(self.projectiles)
 end
