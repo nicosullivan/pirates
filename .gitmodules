@@ -1,3 +1,18 @@
 [submodule "utils/gamera"]
 	path = utils/gamera
 	url = https://github.com/kikito/gamera.git
+[submodule "utils/baton"]
+	path = utils/baton
+	url = https://github.com/tesselode/baton.git
+[submodule "utils/classic"]
+	path = utils/classic
+	url = https://github.com/rxi/classic.git
+[submodule "utils/debugGraph"]
+	path = utils/debugGraph
+	url = https://github.com/mechazawa/Love-Debug-Graph
+[submodule "utils/log"]
+	path = utils/log
+	url = https://github.com/rxi/log.lua.git
+[submodule "utils/sodapop"]
+	path = utils/sodapop
+	url = https://github.com/tesselode/sodapop.git

@@ -1,6 +1,5 @@
 Object = require('utils.classic.classic')
 log = require('utils.log.log')
-lurker = require('utils.lurker.lurker')
 debugGraph = require('utils.debugGraph.debugGraph')
 loader = require('utils.loader.loader')
 baton = require('utils.baton.baton')
@@ -8,7 +7,6 @@ autoloader = require('utils.autoloader')
 gamera = require('utils.gamera.gamera')
 sodapop = require('utils.sodapop.sodapop')
 
-lurker.preswap = function(f) log.info('File ' .. f .. ' was swapped') end
 log.outfile = 'logs/error.log'
 log.usecolor = false
 log.level = 'trace'
@@ -48,7 +46,6 @@ function love.update(dt)
   player:update(dt)
   map:update(dt)
 
-  lurker:update()
   graphs.fps:update(dt)
   graphs.mem:update(dt)
   graphs.projectiles:update(dt, player:getProjectileCount())
