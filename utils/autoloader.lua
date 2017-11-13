@@ -1,4 +1,8 @@
-local autoloader = { _version = '0.1.0', _prefix = '[autoloader] ' }
+local autoloader = {
+ _version = '0.1.0',
+ _prefix = '[AUTOLOADER] ',
+ retryLimit = 10
+}
 
 function autoloader:recursiveEnumerate(folder, file_list)
   local items = love.filesystem.getDirectoryItems(folder)
@@ -14,18 +18,49 @@ function autoloader:recursiveEnumerate(folder, file_list)
 end
 
 function autoloader:load(dir)
-  self:log('debug', 'Loading Files...')
+  self:log('debug', 'Loading Files')
 
   files = {}
+  
+  self.retryCount = 0
+
   self:recursiveEnumerate(dir, files)
 
-  for _, file in pairs(files) do
-    local index = file:sub(1, -5)
-    self:log('trace', 'Loading File ' .. index)
-    require(index)
+  self:loadFiles(files)
+
+  self:log('debug', 'Done loading files')
+end
+
+function autoloader:loadFiles(files)
+  local retry = {}
+
+  if self.retryCount > self.retryLimit then
+    self:log('error', 'Retry limit reached')
+    for _, file in pairs(files) do 
+      self:log('info', 'Unable to load file: ' .. file:sub(1, -5))
+    end
+    return
   end
 
-  self:log('debug', 'Done loading files...')
+  self.retryCount = self.retryCount + 1
+
+  for _, file in pairs(files) do 
+    local index = file:sub(1, -5)
+    self:log('trace', 'Loading File ' .. index)
+    xpcall(require, function(err) 
+        self:log('warn', 'Failed loading file '.. index)
+        self:log('warn', err)
+        _LOADED[index] = nil
+        table.insert(retry, file)
+      end,
+      index
+    )
+  end
+
+  if table.getn(retry) ~= 0 then
+    self:log('trace', 'Number of files not loaded : '.. table.getn(retry))
+    self:loadFiles(retry)
+  end
 end
 
 function autoloader:log(type, string)
